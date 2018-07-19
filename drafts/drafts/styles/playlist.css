@@ -1,0 +1,48 @@
+.toplevelContainer {
+    margin-top: 10px;
+}
+.mainTitle {
+    text-align: center;
+}
+.table {
+  border: 2px solid #bababa;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+   border: 2px solid #bababa;
+}
+.tableContainer {
+    margin-top: 50px;
+}
+#createNewPlaylistB {
+    display: block;
+     width: 200px;
+    margin: 0px auto;
+    margin-top: 20px;
+}
+.musicLibTxt {
+    text-align: center;
+    font-size: 1.1em;
+    margin: 10px auto;
+}
+.btn-group-wrap {
+    margin: 0 auto;
+    text-align: center;
+}
+div.btn-group-vertical {
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+}
+.playlistNameFG {
+    margin-bottom: 25px;
+}
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>Console Log</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% load static %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/linphoneapp.css' %}" />
+<!--
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="styles/default-styles.css">
+<link rel="stylesheet" type="text/css" href="styles/home.css">
+<link rel="stylesheet" type="text/css" href="styles/footer-default.css">
+-->
+</head>
+
+<body>
+
+    <nav class="navbar sticky-top navbar-light bg-light">
+      <div class="container-fluid">
+        <div class=" navbar-header navbar-default">
+          <div class="mycontainer">
+            <a href="/"><img src="{% static 'images/backbutton.png' %}"/></a>
+            &nbsp;Back
+          </div>
+        </div>
+      </div>           
+    </nav>
+    
+    <div class="container toplevelContainer">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-10 col-sm-9 col-md-8 col-lg-7">
+                <div class="mainTitle"><h5><strong>Message Log</strong><h5></div>
+                <form action="" method="post">
+                    <div class="form-group">
+                        <div class="form-group">
+                          <textarea class="form-control" rows="10" id="messageLogAreaID" readonly></textarea>
+                        </div>
+                    </div>
+                </form>
+                <hr>
+                This log stores the last 50 log messages.
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script>
+        function addMessageLogLine(msg) {
+            var myTextArea = $('#messageLogAreaID');
+            if (myTextArea.val()) myTextArea.val(myTextArea.val() + '\n' + msg);
+            else myTextArea.val(msg);
+            myTextArea.scrollTop($myTextArea[0].scrollHeight);
+        }
+        
+        function scrollTextareaBottom() {
+            var textarea = document.getElementById('messageLogAreaID');
+            textarea.scrollTop = textarea.scrollHeight;
+        }
+        
+        var previousID = -1;
+        function fetchLatestMessages() {
+            $.ajax({
+                url: 'data/',
+                data: {
+                    'previousID': previousID
+                },
+                dataType: 'json',
+                success: function (data) {
+                    previousID = data.latest_id;
+                    for (var i = 0; i < data.msg_do_display.length; i++) {
+                        addMessageLogLine(data.msg_do_display[i]);
+                    }
+                    scrollTextareaBottom();
+                }
+            });
+        }
+        
+        setInterval(fetchLatestMessages, 1000);
+    </script>
+</body>
+
+</html>

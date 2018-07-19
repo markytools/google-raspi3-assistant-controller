@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>Video Manager</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% load static %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/settings.css' %}" />
+<!--
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="styles/default-styles.css">
+<link rel="stylesheet" type="text/css" href="styles/home.css">
+<link rel="stylesheet" type="text/css" href="styles/footer-default.css">
+-->
+</head>
+
+<body>
+
+    <nav class="navbar sticky-top navbar-light bg-light">
+      <div class="container-fluid">
+        <div class=" navbar-header navbar-default">
+          <div class="mycontainer">
+            <a href="/"><img src="{% static 'images/backbutton.png' %}"/></a>
+            &nbsp;Back
+          </div>
+        </div>
+      </div>           
+    </nav>
+    
+    <div class="container toplevelContainer">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-10 col-sm-8 col-md-6 col-lg-4">
+                <div class="mainTitle"><h5><strong>Voice Assistant Settings</strong><h5></div>
+                <form action="{% url 'settings:index' %}" method="POST">
+                    {% csrf_token %}
+                    {% if result_msg %}
+                    <br/>
+                    <div class="alert alert-success" id="success-alert">
+                        <button type="button" class="close" data-dismiss="alert">x</button>
+                        <font color="{% if msg_error == '1' %}red{% else %}green{% endif %}">{{ result_msg }}</font>
+                    </div>
+                    {% endif %}
+                    <div class="subTitle"><strong>Linphone SIP Account</strong></div>
+                    <hr>
+                    <div class="form-group">
+                        <label for="inputSIPName">Account Name</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="sip_name" id="inputSIPName" aria-describedby="nameHelp" placeholder="Enter sip name" value="{{ sip_name }}" required/>
+                            <span class="input-group-addon">@sip.linphone.org</span>
+                        </div>
+                        <small id="nameHelp" class="form-text text-muted">Your SIP account name that you had registered at the linphone website (ex. username@sip.linphone.org).</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputSIPPassword">Account Password</label>
+                        <input type="password" class="form-control" id="inputSIPPassword" name="sip_pwd" placeholder="Enter sip password" value="{{ sip_pwd }}" required/>
+                    </div>
+                    <hr>
+                    <br/>
+                    <div class="subTitle"><strong>Speech Engine Source</strong></div>
+                    <hr>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="speech-source-radios" id="speech-source-radios-id0" value="0">
+                      <label class="form-check-label" for="speech-source-radios-id0">
+                        Automatically check for internet
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="speech-source-radios" id="speech-source-radios-id1" value="1">
+                      <label class="form-check-label" for="speech-source-radios-id1">
+                        Google Assistant
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="speech-source-radios" id="speech-source-radios-id2" value="2">
+                      <label class="form-check-label" for="speech-source-radios-id2">
+                        CMU Sphinx
+                      </label>
+                    </div>
+                    <hr>
+                    <button type="submit" class="btn btn-primary" id="saveSettingsB" name="saveSettingsSubmit">Save Settings</button>
+                    <br/>
+                    <br/>
+                </form>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script>
+        document.getElementById("speech-source-radios-id{{ speech_source }}").checked = true;
+         {% if result_msg %}
+            $("#success-alert").delay(1000).fadeOut(1000);
+         {% endif %}
+    </script>
+</body>
+
+</html>

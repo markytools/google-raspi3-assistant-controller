@@ -1,0 +1,39 @@
+.toplevelContainer {
+    margin-top: 10px;
+}
+.mainTitle {
+    text-align: center;
+}
+.table {
+  border: 2px solid #bababa;
+}
+.table th{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.table td{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+   border: 2px solid #bababa;
+}
+
+.tableContainer {
+    margin-top: 50px;
+}
+#addB {
+    display: block;
+     width: 150px;
+    margin: 0px auto;
+}
+.errormsg {
+    text-align: center;
+    color: red;
+    margin-bottom: 10px;
+}

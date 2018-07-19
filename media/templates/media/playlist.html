@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>Video Manager</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% load static %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static 'styles/playlist.css' %}">
+<!--
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="styles/default-styles.css">
+<link rel="stylesheet" type="text/css" href="styles/home.css">
+<link rel="stylesheet" type="text/css" href="styles/footer-default.css">
+-->
+</head>
+
+<body>
+
+    <nav class="navbar sticky-top navbar-light bg-light">
+      <div class="container-fluid">
+        <div class=" navbar-header navbar-default">
+          <div class="mycontainer">
+            <a href="{% url 'media:index' %}"><img src="{% static 'images/backbutton.png' %}"/></a>
+            &nbsp;Back
+          </div>
+        </div>
+      </div>
+    </nav>
+    
+    <div class="container toplevelContainer">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-10 col-sm-8 col-md-6 col-lg-4">
+                <div class="mainTitle"><h5><strong>My Playlists</strong><h5></div>
+                <button type="button" class="btn btn-primary" id="createNewPlaylistB" data-toggle="modal" data-target="#createPlaylistModal" data-playlistname="" data-backdrop="static" data-keyboard="false">Create New Playlist</button>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+    <div class="container tableContainer">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+                <table class="table table-sm table-hover table-bordered" id="playlist-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Playlist Name</th>
+                      <th scope="col">Options</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if playlist_list %}
+                    {% else %}
+                    You have not created any playlist yet.
+                    {% endif %}
+                  </tbody>
+                </table>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="deletePlaylistModal" tabindex="-1" role="dialog" aria-labelledby="deletePlaylistModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deletePlaylistModalLabel">Delete Playlist</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="deleteplaylist-modal-body"></div>
+            <form action="{% url 'media:playlist' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" class="form-control" id="delete-playlist-id" name="deleteplaylist">
+                <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                <button type="submit" name="deletePlaylistSubmit" class="btn btn-success">Yes</button>
+                </div>
+            </form>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal fade" id="createPlaylistModal" tabindex="-1" role="dialog" aria-labelledby="playlistModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="playlistModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <form action="{% url 'media:playlist' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body" id="musiclib-modal-body">
+                        <div class="form-group playlistNameFG">
+                            <label for="edit-playlistName" class="col-form-label">Playlist Name:</label>
+                            <input type="text" class="form-control" id="edit-playlistName" name="playlist-name" required>
+                        </div>
+                        <div class="errormsg" id="id-errormsg">{% if error_message %}{{ error_message }}{% endif %}</div>
+                        <hr>
+                        <div class="musicLibTxt">Music Library
+                            <small id="musicLibHelp" class="form-text text-muted">Click the music that you want to add to this playlist.</small>
+                        </div>
+                        <div class="form-check">
+                            <div class="btn-group btn-group-vertical" data-toggle="buttons" id="id-music-buttons"></div>
+                        </div>
+                    </div>
+                    <input type="hidden" class="form-control" id="id-playlist" name="playlistIDInput">
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="music-lib-submit">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script>
+        var playlistMusicIDs = {};
+        var playlistnames = [];
+        var currentPlaylistName = "";
+        
+        {% for playlist in playlist_list %}
+            var table = document.getElementById("playlist-table");
+            var header = table.createTHead();
+            var row = header.insertRow(-1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            cell1.innerHTML = "<b>{{ forloop.counter }}</b>";
+            cell2.innerHTML = "{{ playlist.name }}";
+            cell3.innerHTML = "<a href='#' id='playlistID{{ playlist.id }}' data-toggle='modal' data-target='#createPlaylistModal' data-playlistname='{{ playlist.name }}' data-backdrop='static' data-keyboard='false'>Edit</a>" + 
+            "&nbsp;<a href='#' id='delete-playlistID{{ playlist.id }}' data-toggle='modal' data-target='#deletePlaylistModal' data-backdrop='static' data-keyboard='false'>Delete</a>";
+            
+            playlistMusicIDs["{{ playlist.id }}"] = [];
+            {% for audio in playlist.audiolist.all %}
+                playlistMusicIDs["{{ playlist.id }}"].push("{{ audio.id }}");
+            {% endfor %}
+            
+            $( "#playlistID{{ playlist.id }}" ).click(function() {
+                currentPlaylistName = "{{ playlist.name }}";
+                {% for audio in audio_list %}
+                    document.getElementById("id-button-music{{ audio.id }}").classList.remove("active");
+                    document.getElementById("id-music{{ audio.id }}").checked = false;
+                {% endfor %}
+                {% for audio in playlist.audiolist.all %}
+                    document.getElementById("id-button-music{{ audio.id }}").classList.add("active");
+                    document.getElementById("id-music{{ audio.id }}").checked = true;
+                {% endfor %}
+                document.getElementById("music-lib-submit").setAttribute("name", "editPlaylistSubmit");
+                document.getElementById("playlistModalLabel").innerHTML = "Edit Playlist";
+                $( "#edit-playlistName" ).val("{{ playlist.name }}");
+                $( "#id-playlist" ).val("{{ playlist.id }}");
+            });
+            
+            playlistnames.push("{{ playlist.name }}");
+            
+            $( "#delete-playlistID{{ playlist.id }}" ).click(function() {
+                $('#deleteplaylist-modal-body').html('Playlist "{{ playlist.name }}" will be deleted from your list. Continue?');
+                $( "#delete-playlist-id" ).val("{{ playlist.id }}");
+            });
+        {% endfor %}
+        
+        {% for audio in audio_list %}
+            var musicButtons = document.getElementById("id-music-buttons");
+            musicButtons.innerHTML += "<label class='btn btn-outline-dark' id='id-button-music{{ audio.id }}'>\n<input type='checkbox' id='id-music{{ audio.id }}' autocomplete='off' name='music{{ audio.id }}'>{{ audio.name }}\n</label>";
+            $('#id-music{{ audio.id }}').mouseup(function() {
+                this.blur();
+            })
+        {% endfor %}
+    
+        $('#createPlaylistModal').on('hide.bs.modal', function () {
+            $( "#musiclib-modal-body" ).scrollTop(0);
+            $('#id-errormsg').html("");
+        });
+        
+        $('#createNewPlaylistB').click(function() {
+            currentPlaylistName = "";
+            {% for audio in audio_list %}
+                document.getElementById("id-button-music{{ audio.id }}").classList.remove("active");
+                document.getElementById("id-music{{ audio.id }}").checked = false;
+            {% endfor %}
+            document.getElementById("music-lib-submit").setAttribute("name", "createNewPlaylistSubmit");
+            document.getElementById("playlistModalLabel").innerHTML = "Create Playlist";
+        });
+        
+        $('#music-lib-submit').click(function(e) {
+            var oneMusicSelected = false;
+            {% for audio in audio_list %}
+                if (document.getElementById("id-music{{ audio.id }}").checked) oneMusicSelected = true;
+            {% endfor %}
+            if (!oneMusicSelected) {
+                $('#id-errormsg').html("You must select at least one music");
+                e.preventDefault();
+            }
+            
+            if (currentPlaylistName == "") {
+                if (playlistnames.indexOf($('#edit-playlistName').val()) != -1) {
+                        $('#id-errormsg').html("Playlist name already exists");
+                        e.preventDefault();
+                }
+            }
+            else {
+                if ($('#edit-playlistName').val() != currentPlaylistName) {
+                    if (playlistnames.indexOf($('#edit-playlistName').val()) != -1) {
+                        $('#id-errormsg').html("Playlist name already exists");
+                        e.preventDefault();
+                    }
+                }
+            }
+        });
+        
+        function hasTouch() {
+            return 'ontouchstart' in document.documentElement
+                   || navigator.maxTouchPoints > 0
+                   || navigator.msMaxTouchPoints > 0;
+        }
+
+        if (hasTouch()) { // remove all :hover stylesheets
+            try { // prevent exception on browsers not supporting DOM styleSheets properly
+                for (var si in document.styleSheets) {
+                    var styleSheet = document.styleSheets[si];
+                    if (!styleSheet.rules) continue;
+
+                    for (var ri = styleSheet.rules.length - 1; ri >= 0; ri--) {
+                        if (!styleSheet.rules[ri].selectorText) continue;
+
+                        if (styleSheet.rules[ri].selectorText.match(':hover')) {
+                            styleSheet.deleteRule(ri);
+                        }
+                    }
+                }
+            } catch (ex) {}
+        }
+    </script>
+</body>
+
+</html>

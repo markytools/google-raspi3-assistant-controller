@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Project SYSTEM "Project-5.1.dtd">
+<!-- eric project file for project currentproject -->
+<!-- Saved: 2017-12-28, 12:31:00 -->
+<!-- Copyright (C) 2017 markytools, markytools@gmail.com -->
+<Project version="5.1">
+  <Language></Language>
+  <Hash>2d95474abef0908c56413414fe25bb4e4be0c24f</Hash>
+  <ProgLanguage mixed="1">Python2</ProgLanguage>
+  <ProjectType>Web</ProjectType>
+  <Description>HTML Drafts for project layout.</Description>
+  <Version>0.1</Version>
+  <Author>markytools</Author>
+  <Email>markytools@gmail.com</Email>
+  <Eol index="0"/>
+  <Sources>
+    <Source>__init__.py</Source>
+  </Sources>
+  <Forms>
+    <Form>index.html</Form>
+    <Form>linphoneapp.html</Form>
+    <Form>mediaapp.html</Form>
+    <Form>musiclib.html</Form>
+    <Form>playlist.html</Form>
+  </Forms>
+  <Translations/>
+  <Resources/>
+  <Interfaces/>
+  <Others>
+    <Other>styles/index.css</Other>
+    <Other>styles/linphoneapp.css</Other>
+    <Other>styles/playlist.css</Other>
+  </Others>
+  <Vcs>
+    <VcsType>None</VcsType>
+  </Vcs>
+  <FiletypeAssociations>
+    <FiletypeAssociation pattern="*.htm" type="FORMS"/>
+    <FiletypeAssociation pattern="*.html" type="FORMS"/>
+    <FiletypeAssociation pattern="*.idl" type="INTERFACES"/>
+    <FiletypeAssociation pattern="*.js" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.ptl" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.py" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.py2" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.py3" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.pyw" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.pyw2" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.pyw3" type="SOURCES"/>
+    <FiletypeAssociation pattern="*.rb" type="SOURCES"/>
+  </FiletypeAssociations>
+</Project>
