@@ -84,7 +84,7 @@ DATABASES = {
         'NAME': 'typiremotedtb',
         'USER': 'root',
         'HOST': 'localhost',
-        'PASSWORD': 'boaconstrictor12',
+        'PASSWORD': 'password',
         'OPTIONS': {
             'sql_mode': 'traditional',
         }
